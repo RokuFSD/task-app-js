@@ -1,0 +1,43 @@
+@use "../abstracts/variables" as var;
+
+h1,
+h2,
+h3 {
+  font-weight: var.$bold;
+}
+
+h1 {
+  font-size: var.$heading-1;
+}
+
+h2 {
+  font-size: var.$heading-2;
+}
+
+h3 {
+  font-size: var.$heading-3;
+}
+
+.link {
+  font-size: var.$small;
+  text-decoration: underline;
+  font-style: normal;
+}
+.main-content {
+  font-size: var.$paragraph;
+  &--bold{
+  font-weight: var.$semi-bold;
+  }
+}
+
+.main-content,
+.sub-content {
+  font-family: var.$font-family;
+}
+
+.sub-content {
+  color: var.$primary-200;
+  font-size: var.$small;
+  font-weight: var.$regular;
+}
+

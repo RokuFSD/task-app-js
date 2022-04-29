@@ -1,0 +1,41 @@
+/*=========== Colors ===========*/
+$primary-100: hsla(176, 100%, 37%, 1);
+$primary-200: hsla(177, 100%, 25%, 1);
+
+$neutral-100: hsla(216, 33%, 97%, 1);
+$neutral-200: hsla(218, 15%, 65%, 1);
+$neutral-300: hsla(219, 9%, 45%, 1);
+
+
+$error-100: hsla(3, 91%, 68%, 1);
+$error-200: hsla(3, 73%, 43%, 1);
+$error-300: hsla(3, 72%, 41%, 1);
+$warning-100: hsla(45, 85%, 70%, 1);
+$warning-200: hsla(45, 99%, 54%, 1);
+$warning-300: hsla(41, 100%, 27%, 1);
+/*=========== Backgrounds ==========*/
+$bg-dark: hsla(231, 11%, 13%, 1);
+$bg-primary: hsla(176, 100%, 25%, 1);
+
+/*============ Google Fonts =============== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/*============ Font Family ===========*/
+$font-family: 'Inter', sans-serif;
+/*============ Font Weights ===========*/
+$bold: 700;
+$semi-bold: 600;
+$regular: 400;
+
+/*============ Typography ==============*/
+$heading-1: 29.75px;
+$heading-2: 23.625px;//
+$heading-3: 19.25px;//
+$paragraph: 14px;
+$small: 12.25px;
+
+/*=========== Spacing ===========*/
+$p-xl: 40px;
+$p-lg: 24px;
+$p-md: 16px;
+$p-sm: 8px

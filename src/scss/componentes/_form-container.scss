@@ -1,0 +1,51 @@
+@use "../abstracts/variables" as var;
+
+.form-container {
+  display: flex;
+  z-index: 1000;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 470px;
+  width: 330px;
+  background: var.$bg-dark;
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  &--active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.form-container__tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var.$primary-200;
+  width: 100%;
+  height: 15%;
+  padding: var.$p-sm;
+}
+
+.tab {
+  width: 100px;
+  font-weight: var.$bold;
+  font-size: var.$paragraph;
+  color: var.$neutral-100;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+
+  &--active {
+    box-shadow: inset 0px -2px 0 var.$bg-dark;
+  }
+}
+
+.form-container__form {
+  height: 85%;
+  padding: var.$p-md var.$p-sm;
+}

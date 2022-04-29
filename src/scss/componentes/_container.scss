@@ -1,0 +1,6 @@
+@use "../abstracts/variables" as var;
+
+.container{
+  max-width: 938px;
+  padding: var.$p-sm;
+}

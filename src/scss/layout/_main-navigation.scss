@@ -1,0 +1,65 @@
+@use "../abstracts/variables" as var;
+
+.header {
+  width: 100%;
+  background: var.$bg-dark;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.nav {
+  background: var.$bg-dark;
+  filter: drop-shadow(0px -2.7px 9px rgba(0, 0, 0, 0.13))
+    drop-shadow(0px -9.4px 24px rgba(0, 0, 0, 0.09))
+    drop-shadow(0px -21.8px 43px rgba(0, 0, 0, 0.08));
+}
+
+.nav__menu {
+  height: 82px;
+  display: flex;
+  align-items: center;
+}
+
+.nav__list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: var.$p-sm;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 94px;
+  height: 100%;
+  list-style: none;
+  color: var.$neutral-100;
+
+  * {
+    pointer-events: none;
+  }
+}
+
+.nav__link {
+  display: flex;
+  color: inherit;
+  font-size: var.$small;
+  flex-direction: column;
+  justify-content: center;
+  gap: var.$p-sm;
+  text-align: center;
+  text-decoration: none;
+  font-weight: var.$semi-bold;
+  transition: all 0.2s ease-in;
+}
+
+.nav__item--active {
+  color: var.$primary-100;
+}
+

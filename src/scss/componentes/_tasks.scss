@@ -1,0 +1,165 @@
+@use "../abstracts/variables" as var;
+
+.tasks {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: var.$p-md;
+  margin: var.$p-lg 0;
+
+  &__sort {
+    align-self: flex-end;
+    width: 5rem;
+    height: 2rem;
+    background: none;
+    font-family: inherit;
+    color: var.$neutral-100;
+
+    &:focus {
+      outline: none;
+      border-color: var.$primary-200;
+    }
+
+    option {
+      background: var.$bg-dark;
+    }
+  }
+}
+
+.task {
+  display: flex;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 15px;
+  border: 2px solid var.$primary-100;
+  position: relative;
+  min-height: 64px;
+  align-items: center;
+  gap: var.$p-sm;
+  padding: 0 var.$p-md;
+  cursor: pointer;
+  transition: all 0.2s linear;
+
+  input[type="checkbox"] {
+    display: grid;
+    place-content: center;
+    appearance: none;
+    background-color: var.$neutral-100;
+    margin: 0;
+    border-radius: 4px;
+    border: 1px solid var.$neutral-200;
+    font: inherit;
+    width: 20px;
+    height: 20px;
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    clip-path: polygon(100% 0, 61% 78%, 50% 100%, 8% 63%, 47% 80%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1rem 1rem var.$neutral-100;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: var.$primary-200;
+    border: none;
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
+
+  &__expanded {
+    height: 100%;
+    flex-wrap: wrap;
+
+    padding: var.$p-lg var.$p-md;
+    .task__open {
+      pointer-events: none;
+      width: 100%;
+      flex-basis: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      p {
+        width: 100%;
+        order: 1;
+        overflow-wrap: break-word;
+        margin-bottom: var.$p-md;
+      }
+    }
+    .btn {
+      font-family: inherit;
+      cursor: pointer;
+      max-width: 5rem;
+      height: 2rem;
+      flex-basis: 50%;
+      order: 2;
+      margin: var.$p-sm;
+      pointer-events: all;
+      font-size: var.$paragraph;
+      font-weight: var.$semi-bold;
+      border: none;
+      border-radius: 4px;
+      transition: all 0.4s ease-in-out;
+
+      &--modify {
+        background: hsla(41, 100%, 48%, 0.2);
+        color: var.$warning-300;
+      }
+      &--delete {
+        background: hsla(3, 73%, 43%, 0.2);
+        color: var.$error-300;
+      }
+      &:disabled {
+        background: var.$neutral-300;
+        color: var.$bg-dark;
+      }
+    }
+  }
+}
+
+.task--done {
+  border-color: var.$primary-200;
+
+  .task__title,
+  .task__due,
+  .task__details {
+    transition: all 0.2s ease-in-out;
+    color: var.$neutral-300;
+  }
+
+  .task__priority {
+    opacity: 0;
+  }
+}
+
+.task__description {
+  line-height: 21px;
+}
+
+.task__priority {
+  position: absolute;
+  right: 0;
+  width: 12px;
+  height: 100%;
+  transition: opacity 0.2s ease-in;
+  &--high {
+    background: var.$error-100;
+  }
+  &--medium {
+    background: var.$warning-100;
+  }
+  &--normal {
+    background: var.$primary-100;
+  }
+}
+
+.task__open {
+  display: none;
+}
+

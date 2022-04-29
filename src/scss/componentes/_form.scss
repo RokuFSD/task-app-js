@@ -1,0 +1,155 @@
+@use "../abstracts/variables" as var;
+
+.form {
+  height: 100%;
+  position: relative;
+  gap: 15px;
+
+  &__input,
+  &__textarea {
+    background: none;
+    border: none;
+    width: 309px;
+    height: 37px;
+    line-height: 21px;
+    font-family: inherit;
+    font-size: var.$paragraph;
+    padding: var.$p-sm var.$p-md;
+    margin: var.$p-sm 0;
+    color: var.$neutral-100;
+
+    &::placeholder {
+      color: var.$neutral-300;
+    }
+    &:focus {
+      outline: 2px solid var.$primary-200;
+    }
+  }
+
+  &__textarea {
+    resize: none;
+    height: 150px;
+  }
+
+  &__label,
+  .btn-group__label {
+    color: var.$neutral-100;
+    line-height: 21px;
+    font-size: var.$paragraph;
+    font-weight: var.$semi-bold;
+    height: 38px;
+    margin: 0 var.$p-sm;
+  }
+
+  input[type="date"] {
+    position: absolute;
+    right: 16px;
+    bottom: calc(0px + 31.5%);
+    font-family: inherit;
+    background: none;
+    border: none;
+    color: var.$neutral-300;
+    width: 218px;
+    height: 38px;
+    font-size: var.$paragraph;
+    padding-inline: 16px;
+    &:focus {
+      outline: 2px solid var.$primary-200;
+    }
+  }
+
+  &__btn {
+    border-radius: 4px;
+    width: 112px;
+    height: 32px;
+    font-family: inherit;
+    font-size: var.$paragraph;
+    font-weight: var.$semi-bold;
+    cursor: pointer;
+    &--submit {
+      background: hsla(176, 100%, 37%, 0.2);
+      color: var.$primary-200;
+      border: none;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translate(-50%);
+    }
+  }
+}
+
+.form__edit {
+  padding: var.$p-md;
+  input[type="date"] {
+    bottom: calc(0px + 43%);
+    right: 24px;
+  }
+  .form__input,
+  .form__textarea {
+    width: 100%;
+  }
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  margin: var.$p-lg 0;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    margin-right: var.$p-md;
+  }
+}
+
+.btn-group input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+
+  &:checked + .btn-group__option--high {
+    background: var.$error-200;
+    color: var.$bg-dark;
+  }
+  &:checked + .btn-group__option--medium {
+    background: var.$warning-200;
+    color: var.$bg-dark;
+  }
+  &:checked + .btn-group__option--normal {
+    background: var.$bg-primary;
+    color: var.$bg-dark;
+  }
+
+  &:focus + label {
+    outline: 2px solid #000;
+  }
+}
+
+.btn-group__option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var.$paragraph;
+  font-weight: var.$semi-bold;
+  width: 77px;
+  height: 32px;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+}
+
+.btn-group__option--high {
+  background: hsla(3, 73%, 43%, 0.2);
+  color: var.$error-300;
+  border-radius: 4px 0 0 4px;
+}
+
+.btn-group__option--medium {
+  background: hsla(41, 100%, 48%, 0.2);
+  color: var.$warning-300;
+}
+
+.btn-group__option--normal {
+  background: hsla(176, 100%, 37%, 0.2);
+  color: var.$primary-200;
+  border-radius: 0 4px 4px 0;
+}

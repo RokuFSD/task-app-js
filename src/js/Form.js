@@ -1,8 +1,10 @@
-import { Input, Label, ButtonGroup, TextArea } from "./componentes";
 import { Mediator } from "./Mediator";
-import { TaskSection } from "./TaskSection";
+import { App } from "./App";
 import { NoteSection } from "./NoteSection";
+import { Project } from "./Project";
 import { generateElement } from "./utils";
+import { Input, Label, ButtonGroup, TextArea } from "./componentes";
+import { TaskSection } from "./TaskSection";
 
 const Form = (element) => {
   let formElement = generateElement("form", { class: `form ${element}` });
@@ -100,7 +102,8 @@ export const FormAdd = (section) => {
 };
 
 export const FormTaskBuilder = (editor) => {
-  let form = editor ? FormEdit(TaskSection) : FormAdd(TaskSection);
+  let taskSection = App.getTaskSection()
+  let form = editor ? FormEdit(taskSection) : FormAdd(taskSection);
 
   function makeForm() {
     form.addInput({
@@ -191,7 +194,7 @@ export const FormNoteBuilder = () => {
 };
 
 export const FormProjectBuilder = () => {
-  let form = FormAdd();
+  let form = FormAdd(Project);
 
   function makeForm() {
     form.addInput({
@@ -217,3 +220,4 @@ export const FormProjectBuilder = () => {
     makeForm,
   };
 };
+

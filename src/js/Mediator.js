@@ -6,14 +6,17 @@ import { FormContainerAdd, FormContainerEditing } from "./FormContainer";
 import { FormAdd, FormEdit } from "./Form";
 import { Task } from "./Task";
 import { Note } from "./Note";
+import { Project } from "./Project";
 
 export const Mediator = (() => {
   let formContainer = FormContainerAdd();
   let formContainerEditing = FormContainerEditing();
-  let task = "";
+  let taskID = "";
+  let wrapper = Navbar.getSubMenu().getSubContainers("Projects");
 
   function notify(sender, event) {
     if (sender === Navbar && event === "render") {
+      App.changeTaskSection(Navbar.getCurrentId());
       App.renderPage(Navbar.getCurrentId());
     }
 
@@ -31,44 +34,57 @@ export const Mediator = (() => {
 
     if (sender === NoteSection && event === "new") {
       NoteSection.addNew(Note(formContainer.getForm().getFormProps()));
-      App.renderPage("notes");
       Navbar.setCurrentById("notes");
+      App.changeTaskSection("notes");
+      App.renderPage("notes");
     }
 
     if (sender === NoteSection && event === "delete") {
       App.renderPage("notes");
-      Navbar.setCurrentById("notes");
     }
 
-    if (sender === TaskSection && event === "new") {
-      TaskSection.addNew(Task(formContainer.getForm().getFormProps()));
+    if (sender instanceof TaskSection && event === "new") {
+      let newTask = Task(formContainer.getForm().getFormProps());
+      App.changeTaskSection(sender.id);
+      if (sender.id !== "inbox") {
+        App.inbox.addNew(newTask);
+      }
+      sender.addNew(newTask);
+      App.renderPage(sender.id);
     }
 
-    if (sender === TaskSection && event === "edit") {
-      TaskSection.updateTask(
-        task,
-        formContainerEditing.getForm().getFormProps()
-      );
+    if (sender instanceof TaskSection && event === "edit") {
+      App.updateAll(taskID, formContainerEditing.getForm().getFormProps());
+      App.renderPage(sender.id);
     }
 
-    if (sender === TaskSection && event === "render") {
-      App.renderPage("inbox");
-      Navbar.setCurrentById("inbox");
+    if (sender instanceof TaskSection && event === "render") {
+      App.renderPage(sender.id);
     }
 
     if (sender === Task && event === "edit") {
-      task = TaskSection.getTaskById(this._id);
-      formContainerEditing.openWithValues(task.taskObj);
+      taskID = this._id;
+      formContainerEditing.openWithValues(this);
     }
+
     if (sender === Task && event === "done") {
-      TaskSection.renderTaskList();
-      App.renderPage("inbox");
+      App.renderPage(App.getCurrentSection().id);
     }
+
     if (sender === Task && event === "delete") {
-      TaskSection.deleteTask(this);
+      App.deleteAll(this._id);
+      App.renderPage(App.getCurrentSection().id);
     }
+
     if (sender === Note && event === "delete") {
       NoteSection.deleteNote(this);
+    }
+
+    if (sender === Project && event === "new") {
+      let { title } = formContainer.getForm().getFormProps();
+      let project = new Project(title);
+      App.addNewProject(project);
+      wrapper.addChild(project.link);
     }
   }
 

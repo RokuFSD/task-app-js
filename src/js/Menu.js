@@ -1,9 +1,7 @@
-import { generateElement, generateId } from "./utils";
-import { Overlay } from "./Overlay";
+import { generateElement } from "./utils";
 
 const Menu = () => {
   let menuElement = generateElement("section", { class: "menu" });
-  let outterOverlay = false;
   let subContainers = [];
 
   function addTitle(titleText) {
@@ -25,10 +23,6 @@ const Menu = () => {
     addToSubContainers(menu);
   }
 
-  function addOverlay(overlay) {
-    outterOverlay = overlay;
-  }
-
   function addChild(element) {
     menuElement.appendChild(element);
   }
@@ -38,15 +32,12 @@ const Menu = () => {
   }
 
   function getSubContainers(id) {
-    return subContainers.find(
-      (element) => element.wrapper.getAttribute("id") === id
-    );
+    return subContainers.find(container => container.id === id);
   }
 
   function handleClose() {
     menuElement.classList.remove("removed");
-    menuElement.remove();
-    outterOverlay.toggleOverlay();
+    menuElement.classList.remove("menu--active")
   }
 
   function closeMenu() {
@@ -55,34 +46,34 @@ const Menu = () => {
   }
 
   function openMenu() {
-    let root = document.querySelector(".header");
+    let root = document.querySelector(".nav__menu");
     root.appendChild(menuElement);
     menuElement.removeEventListener("animationend", handleClose);
-    outterOverlay.toggleOverlay();
+    menuElement.classList.add("menu--active")
   }
 
   return {
     addTitle,
     addButton,
     addInnerMenu,
-    addOverlay,
     getSubContainers,
     openMenu,
     closeMenu,
   };
 };
 
-const MenuWrapper = () => {
+const MenuWrapper = (idWrapper) => {
   let wrapper = generateElement("section", {
     class: "menu__wrapper",
-    id: `${generateId()}`,
   });
+  let id = idWrapper;
 
   function addChild(element) {
     wrapper.appendChild(element);
   }
 
   return {
+    id,
     wrapper,
     addChild,
   };
@@ -92,8 +83,7 @@ export const MenuBottomBuilder = () => {
   let menu = Menu();
 
   function makeMenu(titleText) {
-    let innerMenu = MenuWrapper();
-    let outterOverlay = Overlay();
+    let innerMenu = MenuWrapper(titleText);
     menu.addTitle(titleText);
     menu.addButton(
       {
@@ -103,8 +93,6 @@ export const MenuBottomBuilder = () => {
       { type: "click", callback: menu.closeMenu }
     );
     menu.addInnerMenu(innerMenu);
-    outterOverlay.addEvent({ type: "click", callback: menu.closeMenu });
-    menu.addOverlay(outterOverlay);
   }
 
   function getMenu() {
@@ -116,4 +104,3 @@ export const MenuBottomBuilder = () => {
     getMenu,
   };
 };
-

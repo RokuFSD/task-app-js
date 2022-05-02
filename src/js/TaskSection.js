@@ -1,94 +1,78 @@
 import { generateElement, compareDate, compareString } from "./utils";
-import { Mediator } from "./Mediator";
 import { Select } from "./componentes";
+import { Mediator } from "./Mediator";
 
-export const TaskSection = (() => {
-  let element = "";
-  let allTasks = [];
-  let sortedTasks = [];
-  let sortMode = "date";
-  let selectSort = Select("sortBy");
-  selectSort.addClass("tasks__sort")
-  selectSort.addOption("date", { selected: true });
-  selectSort.addOption("priority");
-  selectSort.addEvent({ type: "change", callback: setSortMode });
+export function TaskSection(title) {
+  this.id = title.toLowerCase();
+  this.element = "";
+  this.allTasks = [];
+  this.sortedTasks = [];
+  this.sortMode = "date";
+  this.selectSort = Select("sortBy");
+  this.selectSort.addClass("tasks__sort");
+  this.selectSort.addOption("date", { selected: true });
+  this.selectSort.addOption("priority");
+  this.selectSort.addEvent({
+    type: "change",
+    callback: (evt) => {
+      this.sortMode = evt.target.value;
+      Mediator.notify(this, "render")
+    },
+  });
+}
 
-  function setTasks(tasks) {
-    allTasks = tasks;
-  }
+TaskSection.prototype.triggerSort = function () {
+  this.sortedTasks = this.allTasks.sort((a, b) => {
+    if (this.sortMode === "date") {
+      return (
+        a.taskObj._done - b.taskObj._done ||
+        compareDate(a.taskObj._created, b.taskObj._created)
+      );
+    } else {
+      return (
+        a.taskObj._done - b.taskObj._done ||
+        compareString(a.taskObj._priority, b.taskObj._priority)
+      );
+    }
+  });
+};
 
-  function setSortMode() {
-    sortMode = this.value;
-    renderTaskList();
-  }
+TaskSection.prototype.getTaskById = function (id) {
+  return this.allTasks.find((task) => task.taskObj._id === id);
+};
 
-  /*
-    true will be coerced to 1 and false to 0 when subtracting. || will return the first truthy operand, 
-    so if the first comparison results in 0 (equal), it will use the result of the second comparison
-  */
-  function triggerSort() {
-    sortedTasks = allTasks.sort((a, b) => {
-      if (sortMode === "date") {
-        return (
-          a.taskObj._done - b.taskObj._done ||
-          compareDate(a.taskObj._created, b.taskObj._created)
-        );
-      } else {
-        return (
-          a.taskObj._done - b.taskObj._done ||
-          compareString(a.taskObj._priority, b.taskObj._priority)
-        );
-      }
-    });
-  }
+TaskSection.prototype.updateTask = function (taskID, props) {
+  let task = this.getTaskById(taskID);
+  if(task && task !== "") task.updateObj(props);
+};
 
-  function getTaskById(id) {
-    return allTasks.find((task) => task.taskObj._id === id);
-  }
+TaskSection.prototype.deleteTask = function (taskToDelete) {
+  this.allTasks = this.allTasks.filter(
+    (task) => task.taskObj._id !== taskToDelete
+  );
+};
 
-  function updateTask(task, props) {
-    task.updateObj(props);
-    renderTaskList();
-  }
+TaskSection.prototype.addNew = function (task) {
+  this.allTasks.push(task);
+};
 
-  function deleteTask(taskToDelete) {
-    allTasks = allTasks.filter((task) => task.taskObj._id !== taskToDelete._id);
-    renderTaskList();
-  }
+TaskSection.prototype.renderList = function () {
+  this.triggerSort();
+  this.element = generateElement(
+    "section",
+    { class: "tasks" },
+    ...[
+      this.selectSort.element,
+      ...this.sortedTasks.map((task) => task.element),
+    ]
+  );
+  this.element.addEventListener("click", (evt) => {
+    if (evt.target.classList && evt.target.classList.contains("task")) {
+      evt.target.classList.toggle("task__expanded");
+    }
+  });
+};
 
-  function addNew(task) {
-    allTasks.push(task);
-    renderTaskList();
-  }
-
-  function renderTaskList() {
-    triggerSort();
-    let allTaskElements = sortedTasks.map((task) => task.element);
-    element = generateElement(
-      "section",
-      { class: "tasks" },
-      ...[selectSort.element, ...allTaskElements]
-    );
-
-    element.addEventListener("click", (evt) => {
-      if (evt.target.classList && evt.target.classList.contains("task")) {
-        evt.target.classList.toggle("task__expanded");
-      }
-    });
-    Mediator.notify(TaskSection, "render");
-  }
-
-  function getDOMElement() {
-    return element;
-  }
-
-  return {
-    addNew,
-    getDOMElement,
-    deleteTask,
-    getTaskById,
-    updateTask,
-    renderTaskList,
-  };
-})();
-
+TaskSection.prototype.getDOMElement = function () {
+  return this.element;
+};

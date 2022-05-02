@@ -1,4 +1,5 @@
 import { format, compareAsc } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 
 export const generateElement = (name, attrs, ...children) => {
   let dom = document.createElement(name);
@@ -12,7 +13,7 @@ export const generateElement = (name, attrs, ...children) => {
 };
 
 export function generateId() {
-  return Date.now();
+  return uuidv4();
 }
 
 export function setCurrentActive(item, propClass) {
@@ -40,6 +41,7 @@ export function compareDate(dateA, dateB) {
   return result;
 }
 
-export function compareString(stringA, stringB){
+export function compareString(stringA, stringB) {
   return stringA.localeCompare(stringB);
-} 
+}
+

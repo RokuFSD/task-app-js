@@ -9,11 +9,16 @@ export const Navbar = (() => {
   setNavigationsEvents();
 
   function setNavigationsEvents() {
+    document.querySelector(".nav__menu").addEventListener("click", (evt) => {
+      handleClick(evt);
+    });
+    /*
     navLinks.forEach((linkItem) =>
       linkItem.addEventListener("click", (evt) => {
         handleClick(evt);
       })
     );
+    */
   }
 
   function getCurrentId() {
@@ -21,8 +26,8 @@ export const Navbar = (() => {
   }
 
   function setCurrentById(id) {
-    let element = document.querySelector(`#${id}`)
-    setCurrentActive(element, "nav__item--active")
+    let element = document.querySelector(`#${id}`);
+    setCurrentActive(element, "nav__item--active");
   }
 
   function handleClick(evt) {
@@ -39,11 +44,16 @@ export const Navbar = (() => {
     subMenu = menuBuilder.getMenu();
   }
 
+  function getSubMenu() {
+    return subMenu;
+  }
+
   return {
     createMenu,
     getCurrentId,
-    setCurrentById
+    setCurrentById,
+    getSubMenu,
   };
 })();
-
 Navbar.createMenu("Projects");
+

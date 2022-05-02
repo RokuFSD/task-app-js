@@ -13,11 +13,11 @@ export const Overlay = () => {
   }
 
   function toggleOverlay() {
-    const body = document.getElementById("body");
+    let root = document.querySelector("#body")
     if (toggled) {
-      body.removeChild(overlay);
+      root.removeChild(overlay);
     } else {
-      body.prepend(overlay);
+      root.prepend(overlay);
     }
     setToggled();
   }

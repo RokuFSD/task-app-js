@@ -7,10 +7,10 @@ export const NoteSection = (() => {
 
   function addNew(note) {
     allNotes.push(note);
-    createNoteList();
+    renderList();
   }
 
-  function createNoteList() {
+  function renderList() {
     element = generateElement(
       "section",
       { class: "notes" },
@@ -23,7 +23,7 @@ export const NoteSection = (() => {
 
   function deleteNote(noteToDelete) {
     allNotes = allNotes.filter((note) => note.noteObj._id !== noteToDelete._id);
-    createNoteList();
+    renderList();
     Mediator.notify(NoteSection, "delete");
   }
 
@@ -31,6 +31,7 @@ export const NoteSection = (() => {
     addNew,
     getDOMElement,
     deleteNote,
+    renderList
   };
 })();
 

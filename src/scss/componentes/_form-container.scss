@@ -24,24 +24,32 @@
 .form-container__tabs {
   display: flex;
   align-items: center;
-  justify-content: space-around;
   background: var.$primary-200;
   width: 100%;
   height: 15%;
   padding: var.$p-sm;
-}
+  .tabs__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    list-style: none;
+    li {
+      width: 100px;
+      font-weight: var.$bold;
+      font-size: var.$paragraph;
+      color: var.$neutral-100;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
 
-.tab {
-  width: 100px;
-  font-weight: var.$bold;
-  font-size: var.$paragraph;
-  color: var.$neutral-100;
-  line-height: 24px;
-  text-align: center;
-  cursor: pointer;
-
-  &--active {
-    box-shadow: inset 0px -2px 0 var.$bg-dark;
+      .tab {
+        color: inherit;
+        text-decoration: none;
+        &--active {
+          box-shadow: inset 0px -2px 0 var.$bg-dark;
+        }
+      }
+    }
   }
 }
 
@@ -49,3 +57,4 @@
   height: 85%;
   padding: var.$p-md var.$p-sm;
 }
+

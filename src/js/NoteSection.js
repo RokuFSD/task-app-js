@@ -4,6 +4,7 @@ import { generateElement } from "./utils";
 export const NoteSection = (() => {
   let element = "";
   let allNotes = [];
+  let id = "notes"
 
   function addNew(note) {
     allNotes.push(note);
@@ -31,7 +32,8 @@ export const NoteSection = (() => {
     addNew,
     getDOMElement,
     deleteNote,
-    renderList
+    renderList,
+    id,
   };
 })();
 

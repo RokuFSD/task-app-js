@@ -11,9 +11,10 @@
 }
 
 .menu {
-  z-index: 1000;
+  z-index:1000;
   position: absolute;
   bottom: 0;
+  box-shadow: 0 0 10px 1px #000;
   background: var.$bg-dark;
   height: 500px;
   width: 310px;
@@ -21,41 +22,21 @@
   transform: translate(-50%, 0);
   border-radius: 1.5rem 1.5rem 0 0;
   padding: var.$p-md;
-  animation: append-animate 0.4s linear;
   visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .4s ease-in;
   &--active {
+    opacity: 1;
     visibility: visible;
   }
 }
-
-.removed {
-  animation: delete-animate 0.4s linear;
-}
-
-@keyframes delete-animate {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes append-animate {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .menu__close {
   position: absolute;
   top: 0;
   right: 0;
   margin: var.$p-xl;
-  background: 0;
+  background: none;
   border: 0;
   font-size: 1.25rem;
   cursor: pointer;
@@ -63,13 +44,35 @@
 }
 
 .menu__title {
-  margin-top: 90px;
+  margin-top: 4rem;
   color: var.$neutral-100;
   border-bottom: 1px solid var.$neutral-300;
 }
+
 .menu__wrapper {
   display: flex;
+  height: 80%;
+  width: 100%;
+  padding-top: var.$p-md;
   flex-direction: column;
-  gap: var.$p-sm;
+  align-items: center;
+  gap: var.$p-md;
+  list-style: none;
+  overflow-y: auto;
 }
 
+.wrapper__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 2rem;
+  color: var.$primary-200;
+  font-weight: var.$semi-bold;
+  font-size: var.$heading-3;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+  &:hover {
+    color: var.$primary-100;
+  }
+}

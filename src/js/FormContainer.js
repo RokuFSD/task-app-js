@@ -1,5 +1,5 @@
 import { Overlay } from "./Overlay";
-import { setCurrentActive } from "./utils";
+import { setCurrentActive, focusableElements } from "./utils";
 import { FormTaskBuilder, FormNoteBuilder, FormProjectBuilder } from "./Form";
 
 const FormContainer = (elementSelector) => {
@@ -7,6 +7,27 @@ const FormContainer = (elementSelector) => {
   let outterOverlay = Overlay();
   let builder = "";
   let form = "";
+  let focusableContent = "";
+  let firstFocusableElement = "";
+  let lastFocusableElement = "";
+
+  /*Tab trap*/
+  element.addEventListener("keydown", function (evt) {
+    if (evt.keyCode === 27) return close();
+    if (evt.keyCode === 13) return;
+    if (!evt.keyCode === 9) return;
+    if (evt.shiftKey) {
+      if (document.activeElement === firstFocusableElement) {
+        lastFocusableElement.focus();
+        evt.preventDefault();
+      }
+    } else {
+      if (document.activeElement === lastFocusableElement) {
+        firstFocusableElement.focus();
+        evt.preventDefault();
+      }
+    }
+  });
 
   outterOverlay.addEvent({ type: "click", callback: close });
 
@@ -42,6 +63,10 @@ const FormContainer = (elementSelector) => {
     } else {
       element.appendChild(form.formElement);
     }
+    focusableContent = element.querySelectorAll(focusableElements);
+    firstFocusableElement = focusableContent[0];
+    lastFocusableElement = focusableContent[focusableContent.length - 1];
+    firstFocusableElement.focus();
   }
 
   return {
@@ -79,6 +104,7 @@ export const FormContainerAdd = () => {
   let tabs = document.querySelectorAll(".tab");
 
   tabs.forEach((tab) => tab.addEventListener("click", handleClick));
+  tabs.forEach((tab) => tab.addEventListener("keydown", handlePress));
 
   function open() {
     prototype.open();
@@ -87,11 +113,23 @@ export const FormContainerAdd = () => {
     prototype.appendFormDOM("form-container__form");
   }
 
-  function handleClick(evt) {
+  function onClickPress(evt) {
     prototype.getForm().reset();
     setCurrentActive(evt, "tab--active");
     switchForm(evt.target.id);
     prototype.appendFormDOM("form-container__form");
+  }
+
+  function handleClick(evt) {
+    evt.preventDefault();
+    onClickPress(evt);
+  }
+
+  function handlePress(evt) {
+    if ((evt.keyCode && evt.keyCode === 13) || evt.keyCode === 32) {
+      evt.preventDefault();
+      onClickPress(evt);
+    }
   }
 
   function switchForm(id) {
@@ -113,3 +151,4 @@ export const FormContainerAdd = () => {
 
   return Object.assign({}, prototype, { open });
 };
+

@@ -1,7 +1,7 @@
 import { generateElement } from "./utils";
 
 const Menu = () => {
-  let menuElement = generateElement("section", { class: "menu" });
+  let menuElement = document.querySelector(".menu")
   let subContainers = [];
 
   function addTitle(titleText) {
@@ -32,24 +32,15 @@ const Menu = () => {
   }
 
   function getSubContainers(id) {
-    return subContainers.find(container => container.id === id);
-  }
-
-  function handleClose() {
-    menuElement.classList.remove("removed");
-    menuElement.classList.remove("menu--active")
+    return subContainers.find((container) => container.id === id);
   }
 
   function closeMenu() {
-    menuElement.classList.add("removed");
-    menuElement.addEventListener("animationend", handleClose);
+    menuElement.classList.remove("menu--active");
   }
 
   function openMenu() {
-    let root = document.querySelector(".nav__menu");
-    root.appendChild(menuElement);
-    menuElement.removeEventListener("animationend", handleClose);
-    menuElement.classList.add("menu--active")
+    menuElement.classList.add("menu--active");
   }
 
   return {
@@ -104,3 +95,4 @@ export const MenuBottomBuilder = () => {
     getMenu,
   };
 };
+

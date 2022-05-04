@@ -1,6 +1,9 @@
 import { format, compareAsc } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
+export const focusableElements =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export const generateElement = (name, attrs, ...children) => {
   let dom = document.createElement(name);
   for (let attr of Object.keys(attrs)) {

@@ -16,10 +16,14 @@ export function TaskSection(title) {
     type: "change",
     callback: (evt) => {
       this.sortMode = evt.target.value;
-      Mediator.notify(this, "render")
+      Mediator.notify(this, "render");
     },
   });
 }
+
+TaskSection.prototype.getAllTasks = function () {
+  return this.allTasks;
+};
 
 TaskSection.prototype.triggerSort = function () {
   this.sortedTasks = this.allTasks.sort((a, b) => {
@@ -43,7 +47,7 @@ TaskSection.prototype.getTaskById = function (id) {
 
 TaskSection.prototype.updateTask = function (taskID, props) {
   let task = this.getTaskById(taskID);
-  if(task && task !== "") task.updateObj(props);
+  if (task && task !== "") task.updateObj(props);
 };
 
 TaskSection.prototype.deleteTask = function (taskToDelete) {
@@ -57,15 +61,17 @@ TaskSection.prototype.addNew = function (task) {
 };
 
 TaskSection.prototype.renderList = function () {
+  let toRender = "";
   this.triggerSort();
-  this.element = generateElement(
-    "section",
-    { class: "tasks" },
-    ...[
+  if (this.allTasks.length > 0) {
+    toRender = [
       this.selectSort.element,
       ...this.sortedTasks.map((task) => task.element),
-    ]
-  );
+    ];
+  } else {
+    toRender = [...this.sortedTasks.map((task) => task.element)];
+  }
+  this.element = generateElement("section", { class: "tasks" }, ...toRender);
   this.element.addEventListener("click", (evt) => {
     if (evt.target.classList && evt.target.classList.contains("task")) {
       evt.target.classList.toggle("task__expanded");
@@ -76,3 +82,4 @@ TaskSection.prototype.renderList = function () {
 TaskSection.prototype.getDOMElement = function () {
   return this.element;
 };
+

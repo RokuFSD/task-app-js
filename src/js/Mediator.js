@@ -51,6 +51,7 @@ export const Mediator = (() => {
       }
       sender.addNew(newTask);
       App.renderPage(sender.id);
+      Navbar.setCurrentById(sender.id);
     }
 
     if (sender instanceof TaskSection && event === "edit") {
@@ -85,6 +86,21 @@ export const Mediator = (() => {
       let project = new Project(title);
       App.addNewProject(project);
       wrapper.addChild(project.link);
+    }
+
+    if (sender instanceof TaskSection && event === "delete") {
+      App.deleteProject(sender.id);
+
+      /*If current page is the project to delete, render inbox*/
+      if (sender.id === App.getCurrentSection().id) {
+        Navbar.setCurrentById("inbox");
+        App.changeTaskSection("inbox");
+        App.renderPage("inbox");
+      } else {
+        console.log(App.getCurrentSection().id);
+        App.changeTaskSection(App.getCurrentSection().id);
+        App.renderPage(App.getCurrentSection().id);
+      }
     }
   }
 

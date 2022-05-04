@@ -33,6 +33,14 @@ export const App = (() => {
     });
   }
 
+  function deleteProject(projectId) {
+    let deletedProjectTasks = projects
+      .find((project) => project.id === projectId)
+      .getAllTasks();
+    deletedProjectTasks.forEach((task) => inbox.deleteTask(task.taskObj._id));
+    projects = projects.filter((project) => project.id !== projectId);
+  }
+
   function createBodyContent() {
     currentSection.renderList();
     bodyContent = currentSection.getDOMElement();
@@ -106,9 +114,9 @@ export const App = (() => {
     inbox,
     updateAll,
     deleteAll,
+    deleteProject,
   };
 })();
 
 //Initial state
 App.renderPage("inbox");
-

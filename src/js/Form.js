@@ -4,7 +4,6 @@ import { NoteSection } from "./NoteSection";
 import { Project } from "./Project";
 import { generateElement } from "./utils";
 import { Input, Label, ButtonGroup, TextArea } from "./componentes";
-import { TaskSection } from "./TaskSection";
 
 const Form = (element) => {
   let formElement = generateElement("form", { class: `form ${element}` });
@@ -102,7 +101,7 @@ export const FormAdd = (section) => {
 };
 
 export const FormTaskBuilder = (editor) => {
-  let taskSection = App.getTaskSection()
+  let taskSection = App.getTaskSection();
   let form = editor ? FormEdit(taskSection) : FormAdd(taskSection);
 
   function makeForm() {
@@ -220,4 +219,3 @@ export const FormProjectBuilder = () => {
     makeForm,
   };
 };
-

@@ -115,8 +115,8 @@ export const FormTaskBuilder = (editor) => {
 
     form.addTextArea({
       className: "form__textarea",
-      id: "description",
-      name: "description",
+      id: "details",
+      name: "details",
       placeholder: "Description...",
     });
 
@@ -170,8 +170,8 @@ export const FormNoteBuilder = () => {
 
     form.addTextArea({
       className: "form__textarea",
-      id: "description",
-      name: "description",
+      id: "details",
+      name: "details",
       placeholder: "Description...",
     });
 

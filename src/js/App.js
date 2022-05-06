@@ -1,6 +1,10 @@
 import { generateElement, capitalize } from "./utils";
+import { Project } from "./Project";
 import { TaskSection } from "./TaskSection";
 import { NoteSection } from "./NoteSection";
+import { Storage } from "./Storage";
+import { Note } from "./Note";
+import { Task } from "./Task";
 
 export const App = (() => {
   let header = document.querySelector(".app__header");
@@ -10,12 +14,25 @@ export const App = (() => {
   let currentPage = "";
   let inbox = new TaskSection("inbox");
   let projects = [];
+  let notes = [];
   let currentTaskSection = inbox;
   let currentSection = inbox;
 
   function createHeader() {
     headerTitle = generateElement("h1", { class: "header__title" });
     headerTitle.textContent = capitalize(currentPage);
+  }
+
+  function updateNoteStorage() {
+    Storage.saveItem("notes", NoteSection.getAllNotes());
+  }
+
+  function updateProjectStorage() {
+    Storage.saveItem("projects", projects);
+  }
+
+  function updateInboxStorage() {
+    Storage.saveItem("inbox", inbox.getAllTasks());
   }
 
   function deleteAll(id) {
@@ -29,6 +46,7 @@ export const App = (() => {
   function updateAll(id, props) {
     inbox.updateTask(id, props);
     projects.map((project) => {
+      console.log(project)
       project.updateTask(id, props);
     });
   }
@@ -37,7 +55,7 @@ export const App = (() => {
     let deletedProjectTasks = projects
       .find((project) => project.id === projectId)
       .getAllTasks();
-    deletedProjectTasks.forEach((task) => inbox.deleteTask(task.taskObj._id));
+    deletedProjectTasks.forEach((task) => inbox.deleteTask(task.taskObj.id));
     projects = projects.filter((project) => project.id !== projectId);
   }
 
@@ -105,6 +123,36 @@ export const App = (() => {
     return currentTaskSection;
   }
 
+  function initialState() {
+    let inboxTasks = Storage.getItem("inbox");
+    let savedProjects = Storage.getItem("projects") || [];
+    notes = Storage.getItem("notes");
+    if (savedProjects && savedProjects.length > 0) {
+      savedProjects.forEach((project) => {
+        let newProject = new Project(project.id);
+        if (project.allTasks.length > 0) {
+          project.allTasks.forEach((task) => {
+            let newTask = Task(task.taskObj);
+            newProject.addNew(newTask);
+          });
+        }
+        addNewProject(newProject);
+      });
+    }
+    if (inboxTasks && inboxTasks.length > 0) {
+      inboxTasks.forEach((task) => {
+        let newTask = Task(task.taskObj);
+        inbox.addNew(newTask);
+      });
+    }
+    if (notes && notes.length > 0) {
+      notes.forEach((note) => {
+        let newNote = Note(note.noteObj);
+        NoteSection.addNew(newNote);
+      });
+    }
+  }
+
   return {
     renderPage,
     changeTaskSection,
@@ -115,8 +163,14 @@ export const App = (() => {
     updateAll,
     deleteAll,
     deleteProject,
+    initialState,
+    updateNoteStorage,
+    updateProjectStorage,
+    updateInboxStorage,
   };
 })();
 
 //Initial state
+App.initialState();
 App.renderPage("inbox");
+

@@ -5,12 +5,12 @@ import { Mediator } from "./Mediator";
 export const Task = (data) => {
   let element = generateElement("div", { class: "task" });
   let taskObj = {
-    _id: generateId(),
-    _title: data.title,
-    _details: data.description,
-    _created: data.date,
-    _done: false,
-    _priority: data.priority,
+    id: data.id ? data.id : generateId(),
+    title: data.title,
+    details: data.details,
+    date: data.date,
+    done: data.done ? data.done : false,
+    priority: data.priority,
   };
 
   let modifyButton = Button("Modify");
@@ -21,40 +21,55 @@ export const Task = (data) => {
   removeButton.addEvent({ type: "click", callback: remove });
   removeButton.addClass("btn--delete");
 
+  domStatus();
   appendTaskElements();
 
+  function getElement() {
+    return element;
+  }
+
+  function domStatus() {
+    if (taskObj.done) {
+      element.classList.add("task--done");
+      modifyButton.disable();
+    } else {
+      element.classList.remove("task--done");
+      modifyButton.enable()
+    }
+  }
+
   function updateObj(props) {
-    taskObj._title = props.title;
-    taskObj._details = props.description;
-    taskObj._created = props.date;
-    taskObj._priority = props.priority;
+    taskObj.title = props.title;
+    taskObj.details = props.details;
+    taskObj.date = props.date;
+    taskObj.priority = props.priority;
+    taskObj.done = props.done;
+    domStatus();
     appendTaskElements();
   }
 
   function toggleDone() {
-    taskObj._done = !taskObj._done;
-    element.classList.toggle("task--done");
-    modifyButton.toggleDisable();
-    Mediator.notify(Task, "done");
+    taskObj.done = !taskObj.done;
+    Mediator.notify.call(taskObj, Task, "done");
   }
 
   function createDOMElements() {
     let taskTitle = generateElement(
       "p",
       { class: "task__title main-content main-content--bold" },
-      document.createTextNode(taskObj._title)
+      document.createTextNode(taskObj.title)
     );
 
     let taskDetails = generateElement(
       "p",
       { class: "task__details main-content" },
-      document.createTextNode(taskObj._details)
+      document.createTextNode(taskObj.details)
     );
 
     let taskDueDate = generateElement(
       "p",
       { class: "task__due sub-content" },
-      document.createTextNode(`Due Date: ${formatDate(taskObj._created)}`)
+      document.createTextNode(`Due Date: ${formatDate(taskObj.date)}`)
     );
 
     let taskCheck = generateElement("input", {
@@ -63,7 +78,7 @@ export const Task = (data) => {
     });
 
     let taskPriority = generateElement("div", {
-      class: `task__priority task__priority--${taskObj._priority}`,
+      class: `task__priority task__priority--${taskObj.priority}`,
     });
 
     let taskDescription = generateElement(
@@ -83,6 +98,7 @@ export const Task = (data) => {
     );
 
     taskCheck.addEventListener("click", toggleDone);
+    taskObj.done ? taskCheck.setAttribute("checked", "") : null;
 
     return {
       taskOpen,
@@ -110,8 +126,8 @@ export const Task = (data) => {
   }
 
   return {
+    getElement,
     updateObj,
-    element,
     taskObj,
   };
 };

@@ -5,7 +5,6 @@ const Button = (value) => {
     { class: "btn" },
     document.createTextNode(value)
   );
-  let disabled = false;
 
   function addClass(className) {
     element.classList.add(`${className}`);
@@ -13,21 +12,23 @@ const Button = (value) => {
   function addEvent(event) {
     element.addEventListener(event.type, event.callback);
   }
-  function toggleDisable() {
-    if (!disabled) {
-      element.setAttribute("disabled", "");
-    } else {
-      element.removeAttribute("disabled", "");
-    }
-    disabled = !disabled
+
+  function disable() {
+    element.setAttribute("disabled", "");
+  }
+
+  function enable() {
+    element.removeAttribute("disabled", "");
   }
 
   return {
     element,
     addClass,
     addEvent,
-    toggleDisable,
+    disable,
+    enable,
   };
 };
 
 export default Button;
+

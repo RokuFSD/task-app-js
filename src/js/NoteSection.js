@@ -4,7 +4,11 @@ import { generateElement } from "./utils";
 export const NoteSection = (() => {
   let element = "";
   let allNotes = [];
-  let id = "notes"
+  let id = "notes";
+
+  function getAllNotes() {
+    return allNotes;
+  }
 
   function addNew(note) {
     allNotes.push(note);
@@ -15,7 +19,7 @@ export const NoteSection = (() => {
     element = generateElement(
       "section",
       { class: "notes" },
-      ...allNotes.map((note) => note.element)
+      ...allNotes.map((note) => note.getElement())
     );
   }
   function getDOMElement() {
@@ -23,7 +27,8 @@ export const NoteSection = (() => {
   }
 
   function deleteNote(noteToDelete) {
-    allNotes = allNotes.filter((note) => note.noteObj._id !== noteToDelete._id);
+    console.log(noteToDelete)
+    allNotes = allNotes.filter((note) => note.noteObj.id !== noteToDelete.id);
     renderList();
     Mediator.notify(NoteSection, "delete");
   }
@@ -34,6 +39,6 @@ export const NoteSection = (() => {
     deleteNote,
     renderList,
     id,
+    getAllNotes,
   };
 })();
-

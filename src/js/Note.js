@@ -4,25 +4,30 @@ import { generateElement, generateId } from "./utils";
 export const Note = (data) => {
   let element = generateElement("div", { class: "note" });
   let noteObj = {
-    _id: generateId(),
-    _title: data.title,
-    _details: data.description,
+    id: data.id ? data.id : generateId(),
+    title: data.title,
+    details: data.details,
   };
+
   let domElements = createDOMElements();
   appendChildElements();
+
+  function getElement() {
+    return element;
+  }
 
   function createDOMElements() {
     let title = generateElement(
       "p",
       { class: "note__title" },
-      document.createTextNode(noteObj._title)
+      document.createTextNode(noteObj.title)
     );
     let details = generateElement(
       "p",
       {
         class: "note__description",
       },
-      document.createTextNode(noteObj._details)
+      document.createTextNode(noteObj.details)
     );
     let closeBtn = generateElement(
       "button",
@@ -55,8 +60,7 @@ export const Note = (data) => {
   }
 
   return {
-    element,
+    getElement,
     noteObj,
   };
 };
-

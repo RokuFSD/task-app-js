@@ -25,6 +25,9 @@ export function Project(title) {
     Mediator.notify(this, "delete");
     this.link.remove();
   });
+
+  Mediator.notify(this, "makelink");
 }
 
 Project.prototype = Object.create(TaskSection.prototype);
+

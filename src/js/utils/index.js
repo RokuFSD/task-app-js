@@ -47,4 +47,3 @@ export function compareDate(dateA, dateB) {
 export function compareString(stringA, stringB) {
   return stringA.localeCompare(stringB);
 }
-

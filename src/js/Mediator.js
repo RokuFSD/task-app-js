@@ -33,29 +33,39 @@ export const Mediator = (() => {
     }
 
     if (sender === NoteSection && event === "new") {
-      NoteSection.addNew(Note(formContainer.getForm().getFormProps()));
+      let noteData = formContainer.getForm().getFormProps();
+      let newNote = Note(noteData);
+      NoteSection.addNew(newNote);
       Navbar.setCurrentById("notes");
       App.changeTaskSection("notes");
       App.renderPage("notes");
+      App.updateNoteStorage();
     }
 
     if (sender === NoteSection && event === "delete") {
       App.renderPage("notes");
+      App.updateNoteStorage();
     }
 
     if (sender instanceof TaskSection && event === "new") {
-      let newTask = Task(formContainer.getForm().getFormProps());
-      App.changeTaskSection(sender.id);
+      let taskData = formContainer.getForm().getFormProps();
+      let newTask = Task(taskData);
       if (sender.id !== "inbox") {
         App.inbox.addNew(newTask);
       }
-      sender.addNew(newTask);
-      App.renderPage(sender.id);
       Navbar.setCurrentById(sender.id);
+      sender.addNew(newTask);
+      App.changeTaskSection(sender.id);
+      App.renderPage(sender.id);
+      App.updateInboxStorage();
+      App.updateProjectStorage();
     }
 
     if (sender instanceof TaskSection && event === "edit") {
-      App.updateAll(taskID, formContainerEditing.getForm().getFormProps());
+      let newTaskData = formContainerEditing.getForm().getFormProps();
+      App.updateAll(taskID, newTaskData);
+      App.updateInboxStorage();
+      App.updateProjectStorage();
       App.renderPage(sender.id);
     }
 
@@ -64,16 +74,21 @@ export const Mediator = (() => {
     }
 
     if (sender === Task && event === "edit") {
-      taskID = this._id;
+      taskID = this.id;
       formContainerEditing.openWithValues(this);
     }
 
     if (sender === Task && event === "done") {
+      App.updateAll(this.id, this);
+      App.updateInboxStorage();
+      App.updateProjectStorage();
       App.renderPage(App.getCurrentSection().id);
     }
 
     if (sender === Task && event === "delete") {
-      App.deleteAll(this._id);
+      App.deleteAll(this.id);
+      App.updateProjectStorage();
+      App.updateInboxStorage();
       App.renderPage(App.getCurrentSection().id);
     }
 
@@ -85,19 +100,22 @@ export const Mediator = (() => {
       let { title } = formContainer.getForm().getFormProps();
       let project = new Project(title);
       App.addNewProject(project);
-      wrapper.addChild(project.link);
+      App.updateProjectStorage();
+    }
+    if (sender instanceof Project && event === "makelink") {
+      wrapper.addChild(sender.link);
     }
 
     if (sender instanceof TaskSection && event === "delete") {
       App.deleteProject(sender.id);
-
+      App.updateProjectStorage();
+      App.updateInboxStorage();
       /*If current page is the project to delete, render inbox*/
       if (sender.id === App.getCurrentSection().id) {
         Navbar.setCurrentById("inbox");
         App.changeTaskSection("inbox");
         App.renderPage("inbox");
       } else {
-        console.log(App.getCurrentSection().id);
         App.changeTaskSection(App.getCurrentSection().id);
         App.renderPage(App.getCurrentSection().id);
       }

@@ -87,11 +87,11 @@ export const FormContainerEditing = () => {
     prototype.open();
     prototype.buildForm({ editMode: true });
     let formDom = prototype.getForm().formElement;
-    formDom.querySelector("#title").setAttribute("value", values._title);
-    formDom.querySelector("#description").textContent = values._details;
-    formDom.querySelector("#date").setAttribute("value", values._created);
+    formDom.querySelector("#title").setAttribute("value", values.title);
+    formDom.querySelector("#details").textContent = values.details;
+    formDom.querySelector("#date").setAttribute("value", values.date);
     formDom
-      .querySelector(`#${values._priority}`)
+      .querySelector(`#${values.priority}`)
       .setAttribute("checked", "checked");
     prototype.appendFormDOM();
   }

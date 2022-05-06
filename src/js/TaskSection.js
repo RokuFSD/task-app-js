@@ -29,30 +29,31 @@ TaskSection.prototype.triggerSort = function () {
   this.sortedTasks = this.allTasks.sort((a, b) => {
     if (this.sortMode === "date") {
       return (
-        a.taskObj._done - b.taskObj._done ||
-        compareDate(a.taskObj._created, b.taskObj._created)
+        a.taskObj.done - b.taskObj.done ||
+        compareDate(a.taskObj.date, b.taskObj.date)
       );
     } else {
       return (
-        a.taskObj._done - b.taskObj._done ||
-        compareString(a.taskObj._priority, b.taskObj._priority)
+        a.taskObj.done - b.taskObj.done ||
+        compareString(a.taskObj.priority, b.taskObj.priority)
       );
     }
   });
 };
 
 TaskSection.prototype.getTaskById = function (id) {
-  return this.allTasks.find((task) => task.taskObj._id === id);
+  return this.allTasks.find((task) => task.taskObj.id === id);
 };
 
 TaskSection.prototype.updateTask = function (taskID, props) {
   let task = this.getTaskById(taskID);
+  console.log(task)
   if (task && task !== "") task.updateObj(props);
 };
 
 TaskSection.prototype.deleteTask = function (taskToDelete) {
   this.allTasks = this.allTasks.filter(
-    (task) => task.taskObj._id !== taskToDelete
+    (task) => task.taskObj.id !== taskToDelete
   );
 };
 
@@ -66,10 +67,10 @@ TaskSection.prototype.renderList = function () {
   if (this.allTasks.length > 0) {
     toRender = [
       this.selectSort.element,
-      ...this.sortedTasks.map((task) => task.element),
+      ...this.sortedTasks.map((task) => task.getElement()),
     ];
   } else {
-    toRender = [...this.sortedTasks.map((task) => task.element)];
+    toRender = [...this.sortedTasks.map((task) => task.getElement())];
   }
   this.element = generateElement("section", { class: "tasks" }, ...toRender);
   this.element.addEventListener("click", (evt) => {
